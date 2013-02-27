@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd ">
+    <welcome-file-list>
+        <welcome-file>index.htm</welcome-file>
+    </welcome-file-list>
+    
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>distribution.root</param-value>
+    </context-param>
+    <listener>
+    	<listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+    </listener>
+    
+    <!-- logback Location配置 -->
+    <context-param>
+        <param-name>logbackConfigLocation</param-name>
+        <param-value>/WEB-INF/config/logback.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>com.test.util.logback.LogbackConfigListener</listener-class>
+    </listener>
+    
+    <!-- Spring 3.1.2配置 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/config/spring/applicationContext*.xml</param-value>
+    </context-param>
+    <listener>
+    	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    <!-- 执行时间Filter -->
+    <filter>
+        <filter-name>processTimeFilter</filter-name>
+        <filter-class>com.test.util.filter.ProcessTimeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>processTimeFilter</filter-name>
+        <url-pattern>*.htm</url-pattern>
+    </filter-mapping>
+    
+    
+    <!-- 编码filter -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/config/spring/dispatcher-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>*.htm</url-pattern>
+    </servlet-mapping>
+</web-app>
