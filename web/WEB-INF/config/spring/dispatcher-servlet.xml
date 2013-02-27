@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+    
+    <!-- 
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+     -->
+    <context:component-scan base-package="cn.ehoo.distribution.ctrl"/>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="stringHttpMessageConverter" />
+            </list>
+        </property>
+    </bean>
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="10485760"/><!-- 10M -->
+        <property name="uploadTempDir" value="upload/temp"/>
+    </bean>
+    
+    <!-- 自定义属性编辑器 -->
+    <bean id="customDateEditor" class="org.springframework.beans.propertyeditors.CustomDateEditor">
+        <constructor-arg index="0" name="dateFormat" ref="simpleDateFormat"/>
+        <constructor-arg index="1" value="true" name="allowEmpty"/>
+    </bean>
+    
+    <bean id="simpleDateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg value="yyyy-MM-dd"/>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="10"/>
+    </bean>
+    
+    <bean id="distributorstatisticsExcelView" class="com.test.util.resolver.DistributorstatisticsExcelView">
+        <property name="url" value="/WEB-INF/template/distributorstatisticsExcelView"/>
+    </bean>
+</beans>
